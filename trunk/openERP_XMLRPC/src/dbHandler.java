@@ -37,7 +37,7 @@ public class dbHandler {
 	private String username = null;
 	private Session openERPSession = null;
 	private ObjectAdapter emplAd = null ;
-	
+
 
 	/**
 	 * Constructeur de la classe avec hôte et port en paramètres, défini les params puis
@@ -56,34 +56,34 @@ public class dbHandler {
 		this.erpBdName=erpBdName;
 		this.openERPSession = new Session("10.194.32.165", 8069, "EQ05_BD_TP1", "admin", "Aquar1um!");
 		try {
-		    
+
 			//this.openERPSession = new Session(host,port,bdPass,username,erpBdName);
-		    openERPSession.startSession();
-		    //ObjectAdapter partnerAd = openERPSession.getObjectAdapter("res.partner");
-		    System.out.println("Connected to : "+this.host);
-		    System.out.println("Browsing object hr.employee");
-		    emplAd = openERPSession.getObjectAdapter("hr.employee");
-		  
+			openERPSession.startSession();
+			//ObjectAdapter partnerAd = openERPSession.getObjectAdapter("res.partner");
+			System.out.println("Connected to : "+this.host);
+			System.out.println("Browsing object hr.employee");
+			emplAd = openERPSession.getObjectAdapter("hr.employee");
+
 		} catch (Exception e) {
-		    System.out.println("Error while reading data from server:\n\n" + e.getMessage());
+			System.out.println("Error while reading data from server:\n\n" + e.getMessage());
 		}
 	}
-	
-	
+
+
 	public void getEmployees () throws XmlRpcException, OpeneERPApiException{	
-		
+
 		try {
-			
+
 			FilterCollection filters = new FilterCollection();
 			filters.add("active","=",true);
 			RowCollection partners = emplAd.searchAndReadObject(filters, new String[]{"name","work_email"});
-			
+
 			for (Row row : partners ){
-				
-			    System.out.println("Row ID: " + row.getID());
-			    System.out.println("Name:" + row.get("name"));
-			    System.out.println("Email:" + row.get("work_email"));
-			    System.out.println("-------------------------------------------------------");
+
+				System.out.println("Row ID: " + row.getID());
+				System.out.println("Name:" + row.get("name"));
+				System.out.println("Email:" + row.get("work_email"));
+				System.out.println("-------------------------------------------------------");
 			}
 		} catch (XmlRpcException e) {
 			// TODO Auto-generated catch block
@@ -92,16 +92,40 @@ public class dbHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+	public void getEmployee (String name) throws XmlRpcException, OpeneERPApiException{	
+
+		try {
+
+			FilterCollection filters = new FilterCollection();
+			filters.add("name","=",name);
+			RowCollection partners = emplAd.searchAndReadObject(filters, new String[]{"name","work_email"});
+
+			for (Row row : partners ){
+
+				System.out.println("Row ID: " + row.getID());
+				System.out.println("Name:" + row.get("name"));
+				System.out.println("Email:" + row.get("work_email"));
+				System.out.println("-------------------------------------------------------");
+			}
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OpeneERPApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	/**
 	 * @param name
 	 * @param newMail
 	 * @throws Exception 
 	 */
 	public void updateField(String FieldName ,String name, String newValue) throws Exception{	
-	  
+
 		FilterCollection filters = new FilterCollection();
 		filters.add("name","=",name);		
 		RowCollection employees = emplAd.searchAndReadObject(filters, new String[]{"name",FieldName});
@@ -109,18 +133,18 @@ public class dbHandler {
 		// You could do some validation here to see if the customer was found
 		Row emplRow = employees.get(0);
 		System.out.println("Old value : "+emplRow.get(FieldName));
-	
-     	emplRow.put(FieldName, newValue);
-		
-		
+
+		emplRow.put(FieldName, newValue);
+
+
 		// Tell writeObject to only write changes ie the name isn't updated because it wasn't changed.
 		boolean success = emplAd.writeObject(emplRow, true);
 
 		if (success)
-		    System.out.println("Update was successful to employee : "+name+", on field : "+FieldName+" with new value : "+newValue);
-		
+			System.out.println("Update was successful to employee : "+name+", on field : "+FieldName+" with new value : "+newValue);
+
 	}
-	
+
 	public void createEmployee(String name, String mail) throws XmlRpcException, OpeneERPApiException{
 		Row newPartner = emplAd.getNewRow(new String[]{"name", "work_email"});
 		newPartner.put("name", name);
@@ -129,7 +153,7 @@ public class dbHandler {
 
 		System.out.println("New Employee ID: " + newPartner.getID());
 	}
-	
+
 	/**
 	 * Méthode qui affiche à la console la list des base de données trouvée sur l'hôte 
 	 * et le port passés en paramètres
@@ -149,7 +173,7 @@ public class dbHandler {
 		Object result = xmlrpcDb.execute("list", params);
 		Object[] a = (Object[]) result;
 		System.err.println("Found following DB's at: "+host+":"+port);
-		
+
 		System.err.println("---------------------------------------------");
 		Vector<String> res = new Vector<String>();
 		for (int i = 0; i < a.length; i++) {
@@ -158,7 +182,7 @@ public class dbHandler {
 
 	}
 
-	
-	
+
+
 
 }
