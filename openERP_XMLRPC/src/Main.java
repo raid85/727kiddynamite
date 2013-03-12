@@ -19,17 +19,17 @@ public class Main {
 	public static void main(String[] args) throws Exception  {
 
 		//Se connecter à la DB
-		dbHandler myDB = new dbHandler ("10.194.32.165", 8069, "EQ05_BD_TP1", "admin", "Aquar1um!");
-		//Print une liste de tout les employés
-		
-		myDB.getEmployees();
+		//dbHandler myDB = new dbHandler ("10.194.32.165", 8069, "EQ05_BD_TP1", "admin", "Aquar1um!");
+		//Print une liste de tout les employés		
+		//myDB.getEmployees();		
 		//Change la valeur email de l'employé
 		//myDB.updateField("work_email","Marc", "Marc@yahoo.com");	
 		//Changer l'adresse d'un employé
-//		myDB.updateField("mobile_phone","Marc", "514-123-4567");	
+		//myDB.updateField("mobile_phone","Marc", "514-123-4567");	
 		//Créer un employé
-//		myDB.createEmployee("Jonathan Vasco","fuckyou@vasco.com");
-		
+		//myDB.createEmployee("Jonathan Vasco","fuckyou@vasco.com");
+		//Rechercher un employé
+		//myDB.getEmployee("Marc");
 
 	}
 }
